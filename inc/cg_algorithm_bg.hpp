@@ -11,7 +11,12 @@
 #include <string>
 #include "cg_algorithm.hpp"
 
-class cg_alg_background_estimation : public cg_algorithm<unsigned char> {
+// std::vector<cg_image<T> *>
+
+// Algorithm for background estimation taking a vector of input images
+typedef std::vector<cg_image<unsigned char> *> image_t;
+
+class cg_alg_background_estimation : public cg_algorithm<image_t> {
 public:
    cg_alg_background_estimation() : mWidth(CG_DEFAULT_WIDTH), mHeight(CG_DEFAULT_HEIGHT), mBackGround(cg_create_raw_8u(CG_DEFAULT_WIDTH, CG_DEFAULT_HEIGHT)) {
       init();
@@ -42,11 +47,11 @@ private:
       cg_zero(mBackGround->get_plane(0));
    }
 
-   void process(std::vector<cg_image<unsigned char> *> *input) {
+   void process(image_t *input) {
 
       unsigned char *data_in = (*input)[0]->get_plane(0).get_data();
       unsigned char *data_out = mBackGround->get_plane(0).get_data();
-      unsigned int size = mBackGround->get_plane(0).get_size();
+      unsigned int   size = mBackGround->get_plane(0).get_size();
 
       unsigned int i;
       for (i = 0;i<size;i++) {

@@ -97,11 +97,12 @@ main(int argc, char *argv[])
 
       // Run the algorithm
       bg->run(&in_image_vec);
+      bg->wait();
 
       // Every second
       if ((iteration % 1) == 0)
       {
-         std::cout << "Copy output" << std::endl;
+         // std::cout << "Copy output" << std::endl;
          cg_copy(&dst, bg->get_bg(), 0);
       }
 
@@ -117,6 +118,8 @@ main(int argc, char *argv[])
 
       if (waitKey(30) >= 0) break;
    }
+
+   bg->stop();
 
    delete bg;
 

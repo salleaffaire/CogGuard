@@ -38,7 +38,7 @@ void cg_copy(cv::Mat *dst, cg_image<unsigned char> *src, unsigned int plane_id) 
       return;
    }
 
-   std::cout << "Copying " << width*height << " bytes." << std::endl;
+   //std::cout << "Copying " << width*height << " bytes." << std::endl;
    memcpy(dst_p, src_p, width*height);
 }
 
