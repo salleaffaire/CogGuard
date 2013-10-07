@@ -20,9 +20,11 @@ class cg_alg_background_estimation : public cg_algorithm<image_t> {
 public:
    cg_alg_background_estimation() : mWidth(CG_DEFAULT_WIDTH), mHeight(CG_DEFAULT_HEIGHT), mBackGround(cg_create_raw_8u(CG_DEFAULT_WIDTH, CG_DEFAULT_HEIGHT)) {
       init();
+      mID = 0xABABABAB;
    }
    cg_alg_background_estimation(unsigned int width, unsigned height) : mWidth(width), mHeight(height), mBackGround(cg_create_raw_8u(width, height)) {
       init();
+      mID = 0xABABABAB;
    }
    ~cg_alg_background_estimation() {
       delete mBackGround;
@@ -32,19 +34,21 @@ public:
       return mBackGround;
    }
 
-   void set_alpha(unsigned char alpha) {
+   void set_alpha(unsigned int alpha) {
       mAlpha = alpha;
    }
 
 private:
    unsigned int  mWidth;
    unsigned int  mHeight;
-   unsigned char mAlpha; // 0 - > 0 : 255 -> 1
+   unsigned int  mAlpha; // 0 - > 0 : 256 -> 1
+   bool          mIsInitialFrame;
 
    cg_image<unsigned char> *mBackGround;
 
    void init() {
       cg_zero(mBackGround->get_plane(0));
+      mIsInitialFrame = true;
    }
 
    void process(image_t *input) {
@@ -55,7 +59,7 @@ private:
 
       unsigned int i;
       for (i = 0;i<size;i++) {
-         unsigned int temp = (mAlpha)**data_in + (255-mAlpha)**data_out;
+         unsigned int temp = (mAlpha)**data_in + (256-mAlpha)**data_out;
          *data_out = (unsigned char)(temp >> 8); // Possible loss of data
          data_in++;
          data_out++;

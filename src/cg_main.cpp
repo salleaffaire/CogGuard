@@ -73,7 +73,7 @@ main(int argc, char *argv[])
 
    // Create algorithms and configure
    cg_alg_background_estimation *bg = new cg_alg_background_estimation(S.width, S.height);
-   bg->set_alpha(10);
+   bg->set_alpha(256);
 
    // Create an output image
    dst.create(S.height, S.width, CV_8UC1);
@@ -98,6 +98,7 @@ main(int argc, char *argv[])
       // Run the algorithm
       bg->run(&in_image_vec);
       bg->wait();
+      bg->set_alpha(6);
 
       // Every second
       if ((iteration % 1) == 0)

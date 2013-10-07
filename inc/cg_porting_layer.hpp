@@ -24,8 +24,10 @@ typedef void *(*pf_t)(void *);
 
 class cg_thread {
 public:
-   cg_thread(pf_t f, void *x);
+   cg_thread();
    ~cg_thread();
+
+   void init(LPTHREAD_START_ROUTINE f, void *x);
 
 private:
 #if (CG_PLATFORM == CG_WINDOWS)
@@ -42,6 +44,7 @@ public:
    cg_mutex();
    ~cg_mutex();
 
+   void init();
    void lock();
    void unlock();
 
@@ -54,9 +57,10 @@ private:
 
 class cg_semaphore {
 public:
-   cg_semaphore(unsigned int init_val);
+   cg_semaphore();
    ~cg_semaphore();
 
+   void init(unsigned int init_val);
    void post();
    void wait();
    void timed_wait(unsigned int usec);

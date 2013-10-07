@@ -11,9 +11,7 @@
 #include <list>
 
 // POSIX Thread and Semaphores
-#include <pthread.h>
-#include <ctime>
-#include <semaphore.h>
+#include "cg_porting_layer.hpp"
 
 #include "cg_image.hpp"
 
@@ -28,18 +26,17 @@
 template <class Y>
 class cg_algorithm {
 public:
-   typedef void *(*pf_t)(void *);
 
    cg_algorithm() {
-      pf_t pf;
 
+      LPTHREAD_START_ROUTINE pf;
       pf = processing_function;
 
-      pthread_mutex_init(&mProtectList, 0);
-      sem_init(&mQueuedInputSemaphore, 0, 0);
-      sem_init(&mQueuedOutputSemaphore, 0, 0);
+      mProtectList.init();
+      mQueuedInputSemaphore.init(0);
+      mQueuedOutputSemaphore.init(0);
 
-      pthread_create(&mProcessignThread, NULL, pf, (void *)this);
+      mProcessignThread.init(pf, this);
 
       mIsRunning    = true;
       mIsProcessing = true;
@@ -55,11 +52,11 @@ public:
       // Only post if the algorithm is running
       if (mIsRunning) {
          // Add to the processing list
-         pthread_mutex_lock(&mProtectList);
+         mProtectList.lock();
          mQueuedInputs.push_back(input);
-         pthread_mutex_unlock(&mProtectList);
+         mProtectList.unlock();
 
-         sem_post(&mQueuedInputSemaphore);
+         mQueuedInputSemaphore.post();
       }
       else {
          rval = false;
@@ -69,55 +66,62 @@ public:
 
    void wait() {
       // Wait until there is a result ready
-      sem_wait(&mQueuedOutputSemaphore);
+      mQueuedOutputSemaphore.wait();
    }
 
+   // Clean up and exit
    void stop() {
       mIsRunning = false;
       while (mQueuedInputs.size() != 0) {
-         sem_post(&mQueuedInputSemaphore);
+         mQueuedInputSemaphore.post();
       }
    }
 
-   static void *processing_function(void *x) {
+   static long unsigned int WINAPI processing_function(void *x) {
       cg_algorithm<Y> *rval = (cg_algorithm<Y> *)x;
 
       while (rval->mIsRunning) {
          // Wait for an input
-         sem_wait(&(rval->mQueuedInputSemaphore));
+         rval->mQueuedInputSemaphore.wait();
 
          // Take from the processing list
-         pthread_mutex_lock(&(rval->mProtectList));
+         rval->mProtectList.lock();
          Y *temp =  rval->mQueuedInputs.front();
          rval->mQueuedInputs.pop_front();
-         pthread_mutex_unlock(&(rval->mProtectList));
+         rval->mProtectList.unlock();
 
          // Call the main processing routine
          if (rval->mIsRunning) rval->process(temp);
 
          // Something is ready !!
-         sem_post(&(rval->mQueuedOutputSemaphore));
+         rval->mQueuedOutputSemaphore.post();
       }
 
       rval->mIsProcessing = false;
 
-      return (void *)x;
+      return 0;
    }
+
+protected:
+   // Algorithm ID
+  unsigned int      mID;
 
 private:
    virtual void process(Y *input) = 0;
 
    // Assynchronous processing classes
-   pthread_t        mProcessignThread;
+   cg_thread        mProcessignThread;
 
    // Protection
-   sem_t            mQueuedInputSemaphore;
-   sem_t            mQueuedOutputSemaphore;
-   pthread_mutex_t  mProtectList;
+   cg_semaphore     mQueuedInputSemaphore;
+   cg_semaphore     mQueuedOutputSemaphore;
+   cg_mutex         mProtectList;
 
    // First implementation will use only one
    //  1- pointer to a vector of input images
    std::list<Y *>   mQueuedInputs;
+
+
 
    bool             mIsRunning;
    bool             mIsProcessing;
