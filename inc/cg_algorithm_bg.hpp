@@ -14,19 +14,19 @@
 // std::vector<cg_image<T> *>
 
 // Algorithm for background estimation taking a vector of input images
-typedef std::vector<cg_image<unsigned char> *> image_t;
+typedef std::vector<cg_image<unsigned char> *> images_t;
 
-class cg_alg_background_estimation : public cg_algorithm<image_t> {
+class cg_future_algorithm_background_estimation : public cg_future_algorithm<images_t> {
 public:
-   cg_alg_background_estimation() : mWidth(CG_DEFAULT_WIDTH), mHeight(CG_DEFAULT_HEIGHT), mBackGround(cg_create_raw_8u(CG_DEFAULT_WIDTH, CG_DEFAULT_HEIGHT)) {
+   cg_future_algorithm_background_estimation() : mWidth(CG_DEFAULT_WIDTH), mHeight(CG_DEFAULT_HEIGHT), mBackGround(cg_create_raw_8u(CG_DEFAULT_WIDTH, CG_DEFAULT_HEIGHT)) {
       init();
       mID = 0xABABABAB;
    }
-   cg_alg_background_estimation(unsigned int width, unsigned height) : mWidth(width), mHeight(height), mBackGround(cg_create_raw_8u(width, height)) {
+   cg_future_algorithm_background_estimation(unsigned int width, unsigned height) : mWidth(width), mHeight(height), mBackGround(cg_create_raw_8u(width, height)) {
       init();
       mID = 0xABABABAB;
    }
-   ~cg_alg_background_estimation() {
+   ~cg_future_algorithm_background_estimation() {
       delete mBackGround;
    }
 
@@ -51,7 +51,7 @@ private:
       mIsInitialFrame = true;
    }
 
-   void process(image_t *input) {
+   void process(images_t *input) {
 
       unsigned char *data_in = (*input)[0]->get_plane(0).get_data();
       unsigned char *data_out = mBackGround->get_plane(0).get_data();

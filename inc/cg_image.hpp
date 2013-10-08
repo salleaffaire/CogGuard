@@ -102,6 +102,18 @@ public:
       return this->mData[y*mStride+x];
    }
 
+   unsigned int get_width() {
+      return mWidth;
+   }
+
+   unsigned int get_height() {
+      return mHeight;
+   }
+
+   unsigned int get_stride() {
+      return mStride;
+   }
+
 private:
    unsigned int mWidth;
    unsigned int mHeight;

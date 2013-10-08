@@ -20,14 +20,15 @@
 #include <semaphore.h>
 #endif
 
-typedef void *(*pf_t)(void *);
+typedef unsigned int (*pf)(void *);
+//typedef void *(*pf_t)(void *);
 
 class cg_thread {
 public:
    cg_thread();
    ~cg_thread();
 
-   void init(LPTHREAD_START_ROUTINE f, void *x);
+   void init(pf f, void *x);
 
 private:
 #if (CG_PLATFORM == CG_WINDOWS)

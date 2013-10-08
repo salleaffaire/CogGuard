@@ -9,11 +9,13 @@
 #define CG_ALGORITHMS_HPP_
 
 #include <list>
+#include <functional>
 
 // POSIX Thread and Semaphores
 #include "cg_porting_layer.hpp"
 
 #include "cg_image.hpp"
+#include "cg_error.hpp"
 
 #define CG_DEFAULT_WIDTH  640
 #define CG_DEFAULT_HEIGHT 480
@@ -24,25 +26,22 @@
 // The algorithm object does not do any memory management
 
 template <class Y>
-class cg_algorithm {
+class cg_future_algorithm {
 public:
 
-   cg_algorithm() {
-
-      LPTHREAD_START_ROUTINE pf;
-      pf = processing_function;
+   cg_future_algorithm() {
 
       mProtectList.init();
       mQueuedInputSemaphore.init(0);
       mQueuedOutputSemaphore.init(0);
 
-      mProcessignThread.init(pf, this);
+      mProcessignThread.init(processing_function, this);
 
       mIsRunning    = true;
       mIsProcessing = true;
    }
 
-   virtual ~cg_algorithm() {
+   virtual ~cg_future_algorithm() {
 
    }
 
@@ -77,8 +76,8 @@ public:
       }
    }
 
-   static long unsigned int WINAPI processing_function(void *x) {
-      cg_algorithm<Y> *rval = (cg_algorithm<Y> *)x;
+   static unsigned int processing_function(void *x) {
+      cg_future_algorithm<Y> *rval = (cg_future_algorithm<Y> *)x;
 
       while (rval->mIsRunning) {
          // Wait for an input
@@ -121,8 +120,6 @@ private:
    //  1- pointer to a vector of input images
    std::list<Y *>   mQueuedInputs;
 
-
-
    bool             mIsRunning;
    bool             mIsProcessing;
 };
@@ -130,12 +127,98 @@ private:
 
 // Simple algorithms on 2D buffers
 
+template<class T, class U>
+unsigned int cg_test_image_sizes(cg_buffer2D<T> &input1, cg_buffer2D<T> &input2, cg_buffer2D<U> &output) {
+   unsigned int rval = CG_OK;
+
+   if (input1.get_width() != input2.get_width()) {
+      rval = CG_ERR_INPUT_WIDTH_MISMATCH;
+   }
+   else if (input1.get_height() != input2.get_height()) {
+      rval = CG_ERR_INPUT_HEIGHT_MISMATCH;
+   }
+   else if (input1.get_width() != output.get_width()) {
+      rval = CG_ERR_IN_OUT_WIDTH_MISMATCH;
+   }
+   else if (input1.get_width() != output.get_width()) {
+      rval = CG_ERR_IN_OUT_HEIGHT_MISMATCH;
+   }
+
+   return rval;
+}
+
 template <class T>
 unsigned int cg_zero(cg_buffer2D<T> &input) {
    T *data = input.get_data();
    unsigned int size = input.get_size();
    memset(data, 0, size*sizeof(T));
-   return 0;
+   return CG_OK;
 }
+
+template <class T, class U>
+unsigned int cg_pixel_process(cg_buffer2D<T> &input1, cg_buffer2D<T> &input2, cg_buffer2D<U> &output,
+                              U (*pp_func)(T, T)) {
+   unsigned int rval = CG_OK;
+
+   cg_test_image_sizes(input1, input2, output);
+
+   if (rval == CG_OK) {
+
+      const unsigned int width   = input1.get_width();
+      const unsigned int height  = input1.get_height();
+      const unsigned int in_stride1 = input1.get_stride();
+      const unsigned int in_stride2 = input2.get_stride();
+      const unsigned int out_stride = output.get_stride();
+
+      T *in_data1 = input1.get_data();
+      T *in_data2 = input2.get_data();
+      U *out_data = output.get_data();
+
+      unsigned int i = 0;
+      unsigned int j = 0;
+      for (j=0;j<height;++j) {
+         for (i=0;i<width;++i) {
+            out_data[i] = pp_func(in_data1[i], in_data2[i]);
+         }
+         in_data1 += in_stride1;
+         in_data2 += in_stride2;
+         out_data += out_stride;
+      }
+   }
+   return rval;
+}
+
+
+template <class T, class U>
+unsigned int cg_pixel_process_image(cg_image<T> &input1, cg_image<T> &input2, cg_image<U> &output,
+                                    U (*pp_func)(T, T)) {
+   unsigned int rval = CG_OK;
+
+   // Test the whether the number of planes
+   // -----------------------------------------------------
+   unsigned int in_num_planes1 = input1.get_number_of_planes();
+   unsigned int in_num_planes2 = input2.get_number_of_planes();
+   unsigned int out_num_planes = output.get_number_of_planes();
+
+   unsigned int processing_planes = (in_num_planes1 < in_num_planes2) ? in_num_planes1 : in_num_planes2;
+
+   if (out_num_planes < processing_planes) {
+      rval |= CG_ERR_NUM_PLANES_MISMATCH;
+   }
+   // -----------------------------------------------------
+
+   if ((rval == CG_OK) && (processing_planes != 0)) {
+      unsigned int i;
+      for (i=0;i<processing_planes;i++) {
+         rval = cg_pixel_process(input1.get_plane(i),
+                                 input2.get_plane(i),
+                                 output.get_plane(i),
+                                 pp_func);
+      }
+   }
+
+   return rval;
+}
+
 
 #endif /* CG_ALGORITHMS_HPP_ */

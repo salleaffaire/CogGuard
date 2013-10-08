@@ -29,7 +29,7 @@ cg_thread::~cg_thread() {
 }
 
 void
-cg_thread::init(LPTHREAD_START_ROUTINE f, void *x) {
+cg_thread::init(pf f, void *x) {
 #if (CG_PLATFORM == CG_WINDOWS)
    mThread = CreateThread(NULL,        // default security attributes
                           0,           // default stack size

@@ -71,8 +71,11 @@ main(int argc, char *argv[])
    in_image_vec[1] = cg_create_raw_8u(S.width, S.height);
    in_image_vec[2] = cg_create_raw_8u(S.width, S.height);
 
+   // Absolute difference between bg and current image
+   cg_image<unsigned char> *diff_image = cg_create_raw_8u(S.width, S.height);
+
    // Create algorithms and configure
-   cg_alg_background_estimation *bg = new cg_alg_background_estimation(S.width, S.height);
+   cg_future_algorithm_background_estimation *bg = new cg_future_algorithm_background_estimation(S.width, S.height);
    bg->set_alpha(256);
 
    // Create an output image
@@ -96,15 +99,29 @@ main(int argc, char *argv[])
       cg_attach(in_image_vec[2], &spl[2], 0);
 
       // Run the algorithm
+      // -------------------------------------------------------------------
       bg->run(&in_image_vec);
       bg->wait();
       bg->set_alpha(6);
 
-      // Every second
-      if ((iteration % 1) == 0)
+      cg_pixel_process_image(*(in_image_vec[0]),
+                             *(bg->get_bg()),
+                             *(diff_image),
+                             *[](unsigned char in1, unsigned char in2) -> unsigned char {
+                                int t = in1 - in2;
+                                t = (t < 0) ? -t : t;
+                                t = (t > 64) ? 255 : 0;
+                                return (unsigned char)(t);
+      });
+
+      // -------------------------------------------------------------------
+
+
+      if ((iteration % 8) == 0)
       {
          // std::cout << "Copy output" << std::endl;
-         cg_copy(&dst, bg->get_bg(), 0);
+         //cg_copy(&dst, bg->get_bg(), 0);
+         cg_copy(&dst, diff_image, 0);
       }
 
       // Do nothing
