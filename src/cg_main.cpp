@@ -27,7 +27,10 @@ using namespace cv;
 // Media streaming classes
 #include "cg_media_segment.hpp"
 
+#include "cg_profile.hpp"
 #include "cg_test.hpp"
+
+
 
 #include <curl/curl.h>
 
@@ -44,6 +47,9 @@ main(int argc, char *argv[])
    // cg_init(&cg_config);
 
    // TestDeque();
+
+   // Create and initialize a profiler
+   cg_profiler pr;
 
 #if 1
 
@@ -100,6 +106,7 @@ main(int argc, char *argv[])
 
       // Run the algorithm
       // -------------------------------------------------------------------
+      pr.start();
       bg->run(&in_image_vec);
       bg->wait();
       bg->set_alpha(6);
@@ -113,7 +120,8 @@ main(int argc, char *argv[])
                                 t = (t > 64) ? 255 : 0;
                                 return (unsigned char)(t);
       });
-
+      unsigned int pr_time = pr.stop();
+      std::cout << "Processing time = " << pr_time << "  seconds." << std::endl;
       // -------------------------------------------------------------------
 
 
