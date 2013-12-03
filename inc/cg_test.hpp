@@ -11,6 +11,8 @@
 #include <deque>
 #include <iostream>
 
+#include "cg_oal.hpp"
+
 template <class T>
 class cg_test_a {
 public:
@@ -29,6 +31,35 @@ public:
       this->protected_a = 0;
       //private_a = 0;
    }
+};
+
+class cg_test_task : public cg_task {
+public:
+   cg_test_task() {
+      mCounter = 10;
+   }
+   ~cg_test_task() {
+
+   }
+
+   bool run() {
+      bool rval = true;
+
+      std::cout << "Allo!" << std::endl;
+      cg_sleep(1000);
+
+      mCounter--;
+
+      if (mCounter == 0) {
+         rval = false;
+      }
+
+      return rval;
+   }
+
+private:
+   unsigned int mCounter;
+
 };
 
 void TestDeque() {

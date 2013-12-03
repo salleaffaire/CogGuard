@@ -16,3 +16,4 @@ int websocket_data_handler(struct mg_connection *conn, int flags,
 void websocket_ready_handler(mg_connection *conn);
 
 #endif /* CG_SOCKET_HANDLER_HPP_ */
+

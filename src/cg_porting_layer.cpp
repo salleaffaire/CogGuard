@@ -157,3 +157,11 @@ cg_mutex::unlock() {
 }
 
 
+void cg_sleep(unsigned int x) {
+#if (CG_PLATFORM == CG_WINDOWS)
+   Sleep(x);
+
+#else
+#endif
+}
+

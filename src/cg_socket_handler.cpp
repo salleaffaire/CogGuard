@@ -24,7 +24,7 @@ void websocket_ready_handler(mg_connection *conn)
 }
 
 int websocket_data_handler(struct mg_connection *conn, int flags,
-                                  char *data, size_t data_len)
+                           char *data, size_t data_len)
 {
   int rval = 1;
 

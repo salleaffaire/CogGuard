@@ -30,9 +30,10 @@ using namespace cv;
 #include "cg_profile.hpp"
 #include "cg_test.hpp"
 
-
-
-#include <curl/curl.h>
+// *******************************
+// Add -l curldll
+// *******************************
+//#include <curl/curl.h>
 
 #define CG_START_VIDEO_SOCKET 1
 #define CG_VIDEO_SOCKET_PORT  8901
@@ -50,6 +51,20 @@ main(int argc, char *argv[])
 
    // Create and initialize a profiler
    cg_profiler pr;
+
+
+// Test task
+#if 0
+   cg_test_task aTestTask;
+   aTestTask.start();
+
+   char key;
+   std::cin >> key;
+
+   aTestTask.stop();
+   aTestTask.wait();
+
+#endif
 
 #if 1
 
@@ -180,6 +195,8 @@ main(int argc, char *argv[])
    curl = curl_easy_init();
    curl_easy_cleanup(curl);
 #endif
+
+   std::cout << "CG Done !!" << std::endl;
 
    return 0;
 }

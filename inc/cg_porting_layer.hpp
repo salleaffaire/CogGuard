@@ -74,5 +74,6 @@ private:
 #endif
 };
 
+void cg_sleep(unsigned int x);
 
 #endif /* CG_PORTING_LAYER_HPP_ */

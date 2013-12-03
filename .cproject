@@ -30,7 +30,7 @@
 									<listOptionValue builtIn="false" value="&quot;C:\opencv2.4.6\build\include\opencv&quot;"/>
 									<listOptionValue builtIn="false" value="../inc"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.1905342911" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols"/>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.1905342911" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def"/>
 								<option id="gnu.cpp.compiler.option.other.other.847768449" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1685550440" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -49,13 +49,11 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.1842142055" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
 								<option id="gnu.cpp.link.option.libs.2063038071" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="wsock32"/>
-									<listOptionValue builtIn="false" value="pthread"/>
 									<listOptionValue builtIn="false" value="opencv_imgproc246"/>
 									<listOptionValue builtIn="false" value="opencv_core246"/>
 									<listOptionValue builtIn="false" value="opencv_video246"/>
 									<listOptionValue builtIn="false" value="opencv_ffmpeg246"/>
 									<listOptionValue builtIn="false" value="opencv_highgui246"/>
-									<listOptionValue builtIn="false" value="curldll"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.32722938" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;C:\Users\luc.martel\workspace.c++\curl-7.32.0\curl-7.32.0\lib&quot;"/>
@@ -134,10 +132,10 @@
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.release.245793224;cdt.managedbuild.config.gnu.mingw.exe.release.245793224.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.release.22361987;cdt.managedbuild.tool.gnu.cpp.compiler.input.902673781">
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.1073865063;cdt.managedbuild.config.gnu.mingw.exe.debug.1073865063.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.96822424;cdt.managedbuild.tool.gnu.cpp.compiler.input.1685550440">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.1073865063;cdt.managedbuild.config.gnu.mingw.exe.debug.1073865063.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.96822424;cdt.managedbuild.tool.gnu.cpp.compiler.input.1685550440">
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.release.245793224;cdt.managedbuild.config.gnu.mingw.exe.release.245793224.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.release.22361987;cdt.managedbuild.tool.gnu.cpp.compiler.input.902673781">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.1073865063;cdt.managedbuild.config.gnu.mingw.exe.debug.1073865063.;cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.1877291939;cdt.managedbuild.tool.gnu.c.compiler.input.432978862">
