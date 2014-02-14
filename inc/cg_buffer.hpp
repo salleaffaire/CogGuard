@@ -137,7 +137,7 @@ public:
    T get_max() {
       T *lp = mData;
       T lmax = *lp++;
-      for (int i=0;i<mSize;++i) {
+      for (unsigned int i=0;i<mSize;++i) {
          if (*lp > lmax) {
             lmax = *lp;
          }
@@ -149,7 +149,7 @@ public:
    T get_min() {
       T *lp = mData;
       T lmin = *lp++;
-      for (int i=0;i<mSize;++i) {
+      for (unsigned int i=0;i<mSize;++i) {
          if (*lp < lmin) {
             lmin = *lp;
          }
@@ -171,9 +171,9 @@ public:
       return rval;
    }
    void to_double(cg_buffer<double> &x) {
-      double *ptTemp = x.mData;
+      double *ptTemp = x.get_data();
       T      *psTemp = mData;
-      for (int i=0;i<mSize;++i) {
+      for (unsigned int i=0;i<mSize;++i) {
          *ptTemp++ = (double)*psTemp++;
       }
    }
@@ -202,10 +202,10 @@ public:
       T PlDyn = MAX - MIN;
 
       float fTEMP;
-      unsigned char *puc = x.mData;
+      unsigned char *puc = x.get_data();
       T             *pT  = mData;
 
-      for (int i=0;i<mSize;i++) {
+      for (unsigned int i=0;i<mSize;i++) {
          fTEMP = (float)(*pT++ - MIN) * 255 / (float)PlDyn;
          *puc++ = (unsigned char)fTEMP;
       }
@@ -340,13 +340,13 @@ public:
 
    cg_buffer2D<double> to_double() {
       cg_buffer2D<double> rval(mWidth, mHeight, mStride);
-      cg_buffer<T>::to_double(rval.mData);
+      cg_buffer<T>::to_double(rval);
       return rval;
    }
 
    cg_buffer2D<unsigned char> scale_to_unsignedchar() {
       cg_buffer2D<unsigned char> rval;
-      cg_buffer<T>::scale_to_usignedchar(rval.mData);
+      cg_buffer<T>::scale_to_unsignedchar(rval);
       return rval;
    }
    // Manipulation
