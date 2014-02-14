@@ -23,6 +23,7 @@ using namespace cv;
 
 // Algorithms
 #include "cg_algorithm_bg.hpp"
+#include "cg_canny.hpp"
 
 // Media streaming classes
 #include "cg_media_segment.hpp"
@@ -65,6 +66,8 @@ main(int argc, char *argv[])
    aTestTask.wait();
 
 #endif
+
+   CCanny<unsigned char> _cannyOperator;
 
 #if 1
 
