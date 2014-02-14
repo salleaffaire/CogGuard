@@ -63,7 +63,7 @@ public:
    }
 
    // Destructor
-   ~cg_buffer() {
+   virtual ~cg_buffer() {
       #if (CG_LOG_IMAGE_MEMORY == 1)
       std::cout << "cg_buffer d" << std::endl;
       #endif
@@ -89,6 +89,10 @@ public:
       copy(x.mData, mSize);
 
       return *this;
+   }
+
+   T &operator[](unsigned int index) {
+      return mData[index];
    }
 
    // Buffer Interface
@@ -119,7 +123,7 @@ public:
       return rval;
    }
 
-   T *get_data() {
+   virtual T *get_data() {
       return mData;
    }
 

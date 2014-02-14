@@ -8,17 +8,17 @@
 #include "cg_log.hpp"
 #include "cg_media_segment.hpp"
 
-cg_media_segment::cg_media_segment() : cg_buffer<unsigned char>()
+cg_media_segment::cg_media_segment() : mDuration(0), mBuffer()
 {
 
 }
 
-cg_media_segment::cg_media_segment(unsigned int size) : cg_buffer<unsigned char>(size)
+cg_media_segment::cg_media_segment(unsigned int size) : mDuration(0), mBuffer(size)
 {
 
 }
 
-cg_media_segment::cg_media_segment(const cg_media_segment &x) : cg_buffer<unsigned char>(x)
+cg_media_segment::cg_media_segment(const cg_media_segment &x) : mDuration(x.mDuration), mBuffer(x.mBuffer)
 {
    //std::cout << "cg_media_segment CC" << std::endl;
 }
@@ -32,7 +32,8 @@ cg_media_segment::~cg_media_segment()
 
 cg_media_segment &cg_media_segment::operator=(const cg_media_segment &x)
 {
-   //std::cout << "cg_media_segment operator=" << std::endl;
+   mDuration = x.mDuration;
+   mBuffer   = x.mBuffer;
    return *this;
 }
 

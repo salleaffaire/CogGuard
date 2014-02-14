@@ -10,7 +10,7 @@
 
 #include "cg_buffer.hpp"
 
-class cg_media_segment : cg_buffer<unsigned char> {
+class cg_media_segment {
 public:
    cg_media_segment();
    cg_media_segment(unsigned int size);
@@ -25,14 +25,14 @@ public:
       return mDuration;
    }
 
+private:
+   unsigned int             mDuration; // Dutarion in msec
+   cg_buffer<unsigned char> mBuffer;
+
    void set_duration(unsigned int duration)
    {
       mDuration = duration;
    }
-
-private:
-   unsigned int mDuration; // Dutarion in msec
-
 };
 
 

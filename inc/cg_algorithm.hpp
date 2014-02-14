@@ -128,6 +128,20 @@ private:
 // Simple algorithms on 2D buffers
 
 template<class T, class U>
+unsigned int cg_test_image_sizes(cg_buffer2D<T> &input, cg_buffer2D<U> &output) {
+   unsigned int rval = CG_OK;
+
+   if (input.get_width() != output.get_width()) {
+      rval = CG_ERR_IN_OUT_WIDTH_MISMATCH;
+   }
+   else if (input.get_height() != output.get_height()) {
+      rval = CG_ERR_IN_OUT_HEIGHT_MISMATCH;
+   }
+
+   return rval;
+}
+
+template<class T, class U>
 unsigned int cg_test_image_sizes(cg_buffer2D<T> &input1, cg_buffer2D<T> &input2, cg_buffer2D<U> &output) {
    unsigned int rval = CG_OK;
 
@@ -140,12 +154,13 @@ unsigned int cg_test_image_sizes(cg_buffer2D<T> &input1, cg_buffer2D<T> &input2,
    else if (input1.get_width() != output.get_width()) {
       rval = CG_ERR_IN_OUT_WIDTH_MISMATCH;
    }
-   else if (input1.get_width() != output.get_width()) {
+   else if (input1.get_height() != output.get_height()) {
       rval = CG_ERR_IN_OUT_HEIGHT_MISMATCH;
    }
 
    return rval;
 }
+
 
 template <class T>
 unsigned int cg_zero(cg_buffer2D<T> &input) {
@@ -214,6 +229,85 @@ unsigned int cg_pixel_process_image(cg_image<T> &input1, cg_image<T> &input2, cg
                                  input2.get_plane(i),
                                  output.get_plane(i),
                                  pp_func);
+      }
+   }
+
+   return rval;
+}
+
+template <class T, class U>
+unsigned int cg_o1_filter_process(cg_buffer2D<T> &input, cg_buffer2D<U> &output,
+                                  U (*pp_func)(T *[])) {
+   unsigned int rval = CG_OK;
+
+   cg_test_image_sizes(input, output);
+
+   if (rval == CG_OK) {
+
+      const unsigned int width      = input.get_width();
+      const unsigned int height     = input.get_height();
+      const unsigned int in_stride  = input.get_stride();
+      const unsigned int out_stride = output.get_stride();
+
+      T *in_first_line  = input.get_data();
+      U *out_first_line = output.get_data();
+
+      T *in_data[3];
+      in_data[0] = in_first_line;
+      in_data[1] = in_data[0] + in_stride;
+      in_data[2] = in_data[1] + in_stride;
+
+      U *out_data = out_first_line + out_stride;
+
+      unsigned int i = 0;
+      unsigned int j = 0;
+      for (j=1;j<height-1;++j) {
+         for (i=1;i<width-1;++i) {
+            *out_data = pp_func(in_data);
+
+            // Update X
+            in_data[0] += 1;
+            in_data[1] += 1;
+            in_data[2] += 1;
+            out_data   += 1;
+         }
+
+         // Update Y
+         in_first_line += in_stride;
+         out_first_line += out_stride;
+
+         in_data[0] = in_first_line;
+         in_data[1] = in_data[0] + in_stride;
+         in_data[2] = in_data[1] + in_stride;
+         out_data = out_first_line;
+      }
+   }
+   return rval;
+}
+
+template <class T, class U>
+unsigned int cg_o1_filter_process_image(cg_image<T> &input, cg_image<U> &output,
+                                        U (*pp_func)(T *[])) {
+   unsigned int rval = CG_OK;
+
+   // Test the whether the number of planes
+   // -----------------------------------------------------
+   unsigned int in_num_planes = input.get_number_of_planes();
+   unsigned int out_num_planes = output.get_number_of_planes();
+
+   unsigned int processing_planes = in_num_planes;
+
+   if (out_num_planes < processing_planes) {
+      rval |= CG_ERR_NUM_PLANES_MISMATCH;
+   }
+   // -----------------------------------------------------
+
+   if ((rval == CG_OK) && (processing_planes != 0)) {
+      unsigned int i;
+      for (i=0;i<processing_planes;i++) {
+         rval = cg_o1_filter_process(input.get_plane(i),
+                                     output.get_plane(i),
+                                     pp_func);
       }
    }
 
