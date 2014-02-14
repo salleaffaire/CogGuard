@@ -23,6 +23,7 @@ using namespace cv;
 
 // Algorithms
 #include "cg_algorithm_bg.hpp"
+#include "cg_canny.hpp"
 
 // Media streaming classes
 #include "cg_media_stream_memory.hpp"
@@ -79,6 +80,7 @@ main(int argc, char *argv[])
 
 #endif
 
+
 // Test Media Streams
 #if 0
    // Test stream file
@@ -99,6 +101,11 @@ main(int argc, char *argv[])
 
    stream_out.close();
 #endif
+
+
+   // Test Algorithm classes
+   // -----------------------------------------------------------------------------
+   CCanny<unsigned char> _cannyOperator;
 
    // Real-time algorithm
    // -----------------------------------------------------------------------------
