@@ -108,7 +108,7 @@ main(int argc, char *argv[])
 
    // Single image algorithm TEST
    // -----------------------------------------------------------------------------
-#if 1
+#if 0
    const char *sourceFileName = "boat1.png";
    //const char *sourceFileName = "Lenna.png";
 
@@ -180,7 +180,7 @@ main(int argc, char *argv[])
 
    // Real-time from sequence algorithm TEST
    // -----------------------------------------------------------------------------
-#if 0
+#if 1
 
    const int alpha_slider_max = 256;
    int       alpha_slider     = 6;

@@ -119,42 +119,42 @@ public:
 
          if (PIL(TY-1,TX-1) == 0) {
             PIL(TY-1,TX-1) = 1;
-            awpix = CWPix(TX-1,TY-1,__ABSOLUTE(X(TY-1,TX-1)-Means[i]));
+            awpix = cg_wpix(TX-1,TY-1,__ABSOLUTE(X(TY-1,TX-1)-Means[i]));
             WPStack.Push(awpix);
          }
          if (PIL(TY-1,TX) == 0) {
             PIL(TY-1,TX) = 1;
-            awpix = CWPix(TX,TY-1,__ABSOLUTE(X(TY-1,TX)-Means[i]));
+            awpix = cg_wpix(TX,TY-1,__ABSOLUTE(X(TY-1,TX)-Means[i]));
             WPStack.Push(awpix);
          }
          if (PIL(TY-1,TX+1) == 0) {
             PIL(TY-1,TX+1) = 1;
-            awpix = CWPix(TX+1,TY-1,__ABSOLUTE(X(TY-1,TX+1)-Means[i]));
+            awpix = cg_wpix(TX+1,TY-1,__ABSOLUTE(X(TY-1,TX+1)-Means[i]));
             WPStack.Push(awpix);
          }
          if (PIL(TY,TX-1) == 0) {
             PIL(TY,TX-1) = 1;
-            awpix = CWPix(TX-1,TY,__ABSOLUTE(X(TY,TX-1)-Means[i]));
+            awpix = cg_wpix(TX-1,TY,__ABSOLUTE(X(TY,TX-1)-Means[i]));
             WPStack.Push(awpix);
          }
          if (PIL(TY,TX+1) == 0) {
             PIL(TY,TX+1) = 1;
-            awpix = CWPix(TX+1,TY,__ABSOLUTE(X(TY,TX+1)-Means[i]));
+            awpix = cg_wpix(TX+1,TY,__ABSOLUTE(X(TY,TX+1)-Means[i]));
             WPStack.Push(awpix);
          }
          if (PIL(TY+1,TX-1) == 0) {
             PIL(TY+1,TX-1) = 1;
-            awpix = CWPix(TX-1,TY+1,__ABSOLUTE(X(TY+1,TX-1)-Means[i]));
+            awpix = cg_wpix(TX-1,TY+1,__ABSOLUTE(X(TY+1,TX-1)-Means[i]));
             WPStack.Push(awpix);
          }
          if (PIL(TY+1,TX) == 0) {
             PIL(TY+1,TX) = 1;
-            awpix = CWPix(TX,TY+1,__ABSOLUTE(X(TY+1,TX)-Means[i]));
+            awpix = cg_wpix(TX,TY+1,__ABSOLUTE(X(TY+1,TX)-Means[i]));
             WPStack.Push(awpix);
          }
          if (PIL(TY+1,TX+1) == 0) {
             PIL(TY+1,TX+1) = 1;
-            awpix = CWPix(TX+1,TY+1,__ABSOLUTE(X(TY+1,TX+1)-Means[i]));
+            awpix = cg_wpix(TX+1,TY+1,__ABSOLUTE(X(TY+1,TX+1)-Means[i]));
             WPStack.Push(awpix);
          }
       }
@@ -232,56 +232,56 @@ public:
             // Place neighbors in SortedStack
             if (curNB & 128) {
                if ((PIL(TY-1,TX-1) == 0) && (TEMP(TY-1,TX-1) == 0)) {
-                  awpix = CWPix(TX-1,TY-1,__ABSOLUTE(X(TY-1,TX-1)-me));
+                  awpix = cg_wpix(TX-1,TY-1,__ABSOLUTE(X(TY-1,TX-1)-me));
                   WPStack.Push(awpix);
                   PIL(TY-1,TX-1) = 1;
                }
             }
             if (curNB & 64) {
                if ((PIL(TY-1,TX) == 0) && (TEMP(TY-1,TX) == 0)) {
-                  awpix = CWPix(TX,TY-1,__ABSOLUTE(X(TY-1,TX)-me));
+                  awpix = cg_wpix(TX,TY-1,__ABSOLUTE(X(TY-1,TX)-me));
                   WPStack.Push(awpix);
                   PIL(TY-1,TX) = 1;
                }
             }
             if (curNB & 32) {
                if ((PIL(TY-1,TX+1) == 0) && (TEMP(TY-1,TX+1) == 0)) {
-                  awpix = CWPix(TX+1,TY-1,__ABSOLUTE(X(TY-1,TX+1)-me));
+                  awpix = cg_wpix(TX+1,TY-1,__ABSOLUTE(X(TY-1,TX+1)-me));
                   WPStack.Push(awpix);
                   PIL(TY-1,TX+1) = 1;
                }
             }
             if (curNB & 16) {
                if ((PIL(TY,TX-1) == 0) && (TEMP(TY,TX-1) == 0)) {
-                  awpix = CWPix(TX-1,TY,__ABSOLUTE(X(TY,TX-1)-me));
+                  awpix = cg_wpix(TX-1,TY,__ABSOLUTE(X(TY,TX-1)-me));
                   WPStack.Push(awpix);
                   PIL(TY,TX-1) = 1;
                }
             }
             if (curNB & 8) {
                if ((PIL(TY,TX+1) == 0) && (TEMP(TY,TX+1) == 0)) {
-                  awpix = CWPix(TX+1,TY,__ABSOLUTE(X(TY,TX+1)-me));
+                  awpix = cg_wpix(TX+1,TY,__ABSOLUTE(X(TY,TX+1)-me));
                   WPStack.Push(awpix);
                   PIL(TY,TX+1) = 1;
                }
             }
             if (curNB & 4) {
                if ((PIL(TY+1,TX-1) == 0) && (TEMP(TY+1,TX-1) == 0)) {
-                  awpix = CWPix(TX-1,TY+1,__ABSOLUTE(X(TY+1,TX-1)-me));
+                  awpix = cg_wpix(TX-1,TY+1,__ABSOLUTE(X(TY+1,TX-1)-me));
                   WPStack.Push(awpix);
                   PIL(TY+1,TX-1) = 1;
                }
             }
             if (curNB & 2) {
                if ((PIL(TY+1,TX) == 0) && (TEMP(TY+1,TX) == 0)) {
-                  awpix = CWPix(TX,TY+1,__ABSOLUTE(X(TY+1,TX)-me));
+                  awpix = cg_wpix(TX,TY+1,__ABSOLUTE(X(TY+1,TX)-me));
                   WPStack.Push(awpix);
                   PIL(TY+1,TX) = 1;
                }
             }
             if (curNB & 1) {
                if ((PIL(TY+1,TX+1) == 0) && (TEMP(TY+1,TX+1) == 0)) {
-                  awpix = CWPix(TX+1,TY+1,__ABSOLUTE(X(TY+1,TX+1)-me));
+                  awpix = cg_wpix(TX+1,TY+1,__ABSOLUTE(X(TY+1,TX+1)-me));
                   WPStack.Push(awpix);
                   PIL(TY+1,TX+1) = 1;
                }
@@ -567,7 +567,7 @@ public:
                   Weight += 0.25*(__ABSOLUTE(X(TY-1,TX-2,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY-1,TX,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY,TX-1,1)-me));
-                  awpix = CWPix(TX-1,TY-1,__ABSOLUTE(X(TY-1,TX-1)-me)+Weight);
+                  awpix = cg_wpix(TX-1,TY-1,__ABSOLUTE(X(TY-1,TX-1)-me)+Weight);
                   WPStack.Push(awpix);
                   PIL(TY-1,TX-1) = 1;
                }
@@ -578,7 +578,7 @@ public:
                   Weight += 0.25*(__ABSOLUTE(X(TY,TX,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY-1,TX-1,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY-1,TX+1,1)-me));
-                  awpix = CWPix(TX,TY-1,__ABSOLUTE(X(TY-1,TX)-me)+Weight);
+                  awpix = cg_wpix(TX,TY-1,__ABSOLUTE(X(TY-1,TX)-me)+Weight);
                   WPStack.Push(awpix);
                   PIL(TY-1,TX) = 1;
                }
@@ -589,7 +589,7 @@ public:
                   Weight += 0.25*(__ABSOLUTE(X(TY,TX+1,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY-1,TX,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY-1,TX+2,1)-me));
-                  awpix = CWPix(TX+1,TY-1,__ABSOLUTE(X(TY-1,TX+1)-me)+Weight);
+                  awpix = cg_wpix(TX+1,TY-1,__ABSOLUTE(X(TY-1,TX+1)-me)+Weight);
                   WPStack.Push(awpix);
                   PIL(TY-1,TX+1) = 1;
                }
@@ -600,7 +600,7 @@ public:
                   Weight += 0.25*(__ABSOLUTE(X(TY+1,TX-1,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY,TX-2,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY,TX,1)-me));
-                  awpix = CWPix(TX-1,TY,__ABSOLUTE(X(TY,TX-1)-me)+Weight);
+                  awpix = cg_wpix(TX-1,TY,__ABSOLUTE(X(TY,TX-1)-me)+Weight);
                   WPStack.Push(awpix);
                   PIL(TY,TX-1) = 1;
                }
@@ -611,7 +611,7 @@ public:
                   Weight += 0.25*(__ABSOLUTE(X(TY-1,TX+1,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY,TX,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY,TX+2,1)-me));
-                  awpix = CWPix(TX+1,TY,__ABSOLUTE(X(TY,TX+1)-me)+Weight);
+                  awpix = cg_wpix(TX+1,TY,__ABSOLUTE(X(TY,TX+1)-me)+Weight);
                   WPStack.Push(awpix);
                   PIL(TY,TX+1) = 1;
                }
@@ -622,7 +622,7 @@ public:
                   Weight += 0.25*(__ABSOLUTE(X(TY+2,TX-1,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY+1,TX-2,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY+1,TX,1)-me));
-                  awpix = CWPix(TX-1,TY+1,__ABSOLUTE(X(TY+1,TX-1)-me)+Weight);
+                  awpix = cg_wpix(TX-1,TY+1,__ABSOLUTE(X(TY+1,TX-1)-me)+Weight);
                   WPStack.Push(awpix);
                   PIL(TY+1,TX-1) = 1;
                }
@@ -633,7 +633,7 @@ public:
                   Weight += 0.25*(__ABSOLUTE(X(TY,TX,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY+1,TX+1,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY+1,TX-1,1)-me));
-                  awpix = CWPix(TX,TY+1,__ABSOLUTE(X(TY+1,TX)-me)+Weight);
+                  awpix = cg_wpix(TX,TY+1,__ABSOLUTE(X(TY+1,TX)-me)+Weight);
                   WPStack.Push(awpix);
                   PIL(TY+1,TX) = 1;
                }
@@ -644,7 +644,7 @@ public:
                   Weight += 0.25*(__ABSOLUTE(X(TY,TX+1,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY+1,TX+2,1)-me));
                   Weight += 0.25*(__ABSOLUTE(X(TY+1,TX,1)-me));
-                  awpix = CWPix(TX+1,TY+1,__ABSOLUTE(X(TY+1,TX+1)-me)+Weight);
+                  awpix = cg_wpix(TX+1,TY+1,__ABSOLUTE(X(TY+1,TX+1)-me)+Weight);
                   WPStack.Push(awpix);
                   PIL(TY+1,TX+1) = 1;
                }
