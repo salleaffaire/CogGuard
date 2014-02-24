@@ -8,6 +8,36 @@
 #include "cg_image.hpp"
 
 
+std::ostream &operator<<(std::ostream &s, cg_wpix x)
+{
+  s << "X :" << x.X;
+  s << std::endl;
+  s << "Y :" << x.Y;
+  s << std::endl;
+
+  return s;
+}
+
+std::istream &operator>>(std::istream &s, cg_wpix x)
+{
+  s >> x.X;
+  s >> x.Y;
+  s >> x.W;
+
+  return s;
+}
+
+int compare(const cg_wpix &X, const cg_wpix &Y)
+{
+  if (X >= Y) {
+    return 0;
+  }
+  else {
+    return 1;
+  }
+}
+
+
 cg_image<unsigned char> *cg_create_raw_8u(unsigned int width, unsigned int height) {
    cg_image<unsigned char> *rval = new cg_image<unsigned char>(width, height, 1);
 

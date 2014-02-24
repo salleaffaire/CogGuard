@@ -12,7 +12,60 @@
 #include "cg_buffer.hpp"
 
 #include <vector>
+#include <memory>
+#include <iostream>
 
+class cg_pix {
+public:
+  int X;
+  int Y;
+  cg_pix() {
+    X = 0;
+    Y = 0;
+  }
+  cg_pix(int x, int y) {
+    X = x;
+    Y = y;
+  }
+};
+
+class cg_wpix {
+public:
+  int X;
+  int Y;
+  double W;
+  cg_wpix() {
+    X = 0;
+    Y = 0;
+    W = 0;
+  }
+  cg_wpix(int x, int y, double w) {
+    X = x;
+    Y = y;
+    W = w;
+  }
+  cg_wpix(int x) {
+    X = 0;
+    Y = 0;
+    W = 0;
+  }
+
+  bool operator>(cg_wpix AA) const {
+    return (W > AA.W) ? true : false;
+  }
+
+  bool operator<(cg_wpix AA) const {
+     return (W < AA.W) ? true : false;
+  }
+
+  bool operator>=(cg_wpix AA) const {
+     return (W >= AA.W) ? true : false;
+  }
+
+  bool operator<=(cg_wpix AA) const {
+     return (W <= AA.W) ? true : false;
+  }
+};
 
 template <class T>
 class cg_image {
@@ -23,9 +76,8 @@ public:
       std::cout << "cg_image dc" << std::endl;
       #endif
 
-      mWidth  = 0;
-      mHeight = 0;
-
+      mWidth          = 0;
+      mHeight         = 0;
       mNumberOfPlanes = 0;
    }
    cg_image(unsigned int width, unsigned int height, unsigned int numberofplanes) {
@@ -33,10 +85,18 @@ public:
       std::cout << "cg_image c" << std::endl;
       #endif
 
-      mWidth = width;
-      mHeight = height;
+      mWidth          = width;
+      mHeight         = height;
       mNumberOfPlanes = numberofplanes;
       mPlanes.resize(numberofplanes);
+   }
+
+   cg_image(const cg_buffer2D<T> &x) {
+      mWidth          = x.mWidth;
+      mHeight         = x.mHeight;
+      mNumberOfPlanes = 1;
+      mPlanes.resize(1);
+      mPlanes[0] = x;
    }
 
    cg_image(const cg_image<T> &x) {
@@ -44,11 +104,10 @@ public:
       std::cout << "cg_image cc" << std::endl;
       #endif
 
-      mWidth = x.mWidth;
-      mHeight = x.mHeight;
-
+      mWidth          = x.mWidth;
+      mHeight         = x.mHeight;
       mNumberOfPlanes = x.mNumberOfPlanes;
-      mPlanes = x.mPlanes;
+      mPlanes         = x.mPlanes;
    }
 
    cg_image<T> &operator=(const cg_image<T> &x) {
@@ -59,11 +118,10 @@ public:
       // Clear the planes
       mPlanes.clear();
 
-      mWidth = x.mWidth;
-      mHeight = x.mHeight;
-
+      mWidth          = x.mWidth;
+      mHeight         = x.mHeight;
       mNumberOfPlanes = x.mNumberOfPlanes;
-      mPlanes = x.mPlanes;
+      mPlanes         = x.mPlanes;
       return *this;
    }
 
@@ -93,6 +151,11 @@ private:
    std::vector<cg_buffer2D<T> >  mPlanes;
 
 };
+
+// Image smart pointers
+// ----------------------------------------------------------------------
+typedef std::unique_ptr<cg_image<unsigned char>> cg_im_ptr;
+
 
 cg_image<unsigned char> *cg_create_raw_8u(unsigned int width, unsigned int height);
 cg_image<unsigned int> *cg_create_raw_32u(unsigned int width, unsigned int height);

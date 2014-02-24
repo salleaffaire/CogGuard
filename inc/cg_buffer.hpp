@@ -160,6 +160,10 @@ public:
 
    // Manipulation
    // --------------------------------------------------------
+   void zero() {
+      memset(mData, 0, mSize*sizeof(T));
+   }
+
    cg_buffer<double> to_double() {
       cg_buffer<double> rval(mSize);
 
@@ -177,6 +181,25 @@ public:
          *ptTemp++ = (double)*psTemp++;
       }
    }
+
+   cg_buffer<unsigned int> to_uint() {
+      cg_buffer<unsigned int> rval(mSize);
+
+      unsigned int *ptTemp = rval.mData;
+      T            *psTemp = mData;
+      for (int i=0;i<mSize;++i) {
+         *ptTemp++ = (unsigned int)*psTemp++;
+      }
+      return rval;
+   }
+   void to_uint(cg_buffer<unsigned int> &x) {
+      unsigned int *ptTemp = x.get_data();
+      T            *psTemp = mData;
+      for (unsigned int i=0;i<mSize;++i) {
+         *ptTemp++ = (unsigned int)*psTemp++;
+      }
+   }
+
 
    cg_buffer<unsigned char> scale_to_unsignedchar() {
       cg_buffer<unsigned char> rval(mSize);
@@ -311,7 +334,7 @@ public:
       return operator=(const_cast<const cg_buffer2D<T> &>(x));
    }
 
-   T operator()(unsigned int x, unsigned int y) {
+   T &operator()(unsigned int y, unsigned int x) {
       return this->mData[y*mStride+x];
    }
 
@@ -344,10 +367,29 @@ public:
       return rval;
    }
 
+   void to_double(cg_buffer2D<double> &X) {
+      cg_buffer<T>::to_double(X);
+   }
+
+   cg_buffer2D<unsigned int> to_uint() {
+      cg_buffer2D<unsigned int> rval(mWidth, mHeight, mStride);
+      cg_buffer<T>::to_uint(rval);
+      return rval;
+   }
+
+   void to_uint(cg_buffer2D<unsigned int> &X) {
+      cg_buffer<T>::to_uint(X);
+   }
+
    cg_buffer2D<unsigned char> scale_to_unsignedchar() {
-      cg_buffer2D<unsigned char> rval;
+      cg_buffer2D<unsigned char> rval(mWidth, mHeight, mStride);
       cg_buffer<T>::scale_to_unsignedchar(rval);
       return rval;
+   }
+
+   void scale_to_unsignedchar(cg_buffer2D<unsigned char> &X) {
+      cg_buffer<T>::scale_to_unsignedchar(X);
+
    }
    // Manipulation
    // --------------------------------------------------------

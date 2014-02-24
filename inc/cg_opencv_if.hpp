@@ -12,9 +12,10 @@
 #include "cg_image.hpp"
 
 void cg_attach(cg_image<unsigned char> *dst, cv::Mat *src, unsigned int plane_id);
+void cg_attach(cg_image<unsigned char> &dst, cv::Mat *src, unsigned int plane_id);
 
 void cg_copy(cv::Mat *dst, cg_image<unsigned char> *src, unsigned int plane_id);
-
+void cg_copy(cv::Mat *dst, cg_image<unsigned char> &src, unsigned int plane_id);
 
 
 #endif /* CG_OPENCV_IF_HPP_ */

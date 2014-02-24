@@ -23,7 +23,10 @@ using namespace cv;
 
 // Algorithms
 #include "cg_algorithm_bg.hpp"
-#include "cg_canny.hpp"
+#include "edge/cg_canny.hpp"
+#include "edge/cg_busiest_path.hpp"
+#include "edge/cg_combvar.hpp"
+#include "edge/cg_reggrow.hpp"
 
 // Media streaming classes
 #include "cg_media_stream_memory.hpp"
@@ -47,6 +50,7 @@ using namespace cv;
 #define CG_VIDEO_SOCKET_PORT  8901
 
 #define CG_WRITE_BACK         0
+
 
 // *******************************
 // Callbacks
@@ -102,14 +106,81 @@ main(int argc, char *argv[])
    stream_out.close();
 #endif
 
-
-   // Test Algorithm classes
-   // -----------------------------------------------------------------------------
-   CCanny<unsigned char> _cannyOperator;
-
-   // Real-time algorithm
+   // Single image algorithm TEST
    // -----------------------------------------------------------------------------
 #if 1
+   const char *sourceFileName = "boat1.png";
+   //const char *sourceFileName = "Lenna.png";
+
+   // Edge Extractor Operator
+   cg_canny<unsigned char>          _cannyOperator;
+   cg_busiest_path<unsigned char>   _busiestPathOperator;
+   cg_combvar<unsigned char>        _combvarOperator;
+   cg_seedreggrowing<unsigned char> _seedreggrowOperator;
+
+   // Read the source image
+   Mat im_cv_in;
+   Mat im_cv_out;
+
+   // Source image planes
+   vector<Mat> im_cv_src_planes;
+
+   // Read a source image
+   //im_src = imread(sourceFileName, CV_LOAD_IMAGE_COLOR);   // Read the file
+   im_cv_in = imread(sourceFileName, CV_LOAD_IMAGE_GRAYSCALE);   // Read the file
+
+   // Check for invalid input
+   if (!im_cv_in.data) {
+       std::cout <<  "Could not open or find the image" << std::endl ;
+   }
+   else {
+      // Get the image sizes
+      const unsigned int source_width  = im_cv_in.cols;
+      const unsigned int source_height = im_cv_in.rows;
+
+      // Allocate memory for the destibation image
+      im_cv_out.create(source_height, source_width, CV_8UC1);
+
+      // Split the color planes
+      split(im_cv_in, im_cv_src_planes);
+
+      std::cout << "Read " << sourceFileName << std::endl;
+      std::cout << "Size " << source_width << " x " << source_height << std::endl;
+      std::cout << "Number of Planes = " << im_cv_src_planes.size() << std::endl;
+
+      // Create a CG image ptr
+      cg_im_ptr im_cg_in(cg_create_raw_8u(source_width, source_height));
+      cg_im_ptr in_cg_out(cg_create_raw_8u(source_width, source_height));
+
+      // Attach to the OpenCV image
+      cg_attach(*im_cg_in, &im_cv_src_planes[0], 0);
+
+      // Apply the an operator
+      // ----------------------------------------------------------------------------
+      // _cannyOperator.ExtractEdge(im_cg_in->get_plane(0), in_cg_out->get_plane(0));
+       _busiestPathOperator(im_cg_in->get_plane(0), in_cg_out->get_plane(0), 6.0);
+      //_combvarOperator.HorH(_combvarOperator.HVariations(im_cg_in->get_plane(0)),
+      //                      _combvarOperator.VVariations(im_cg_in->get_plane(0)),
+      //                     in_cg_out->get_plane(0));
+      // ----------------------------------------------------------------------------
+
+      // Copy the destination to an OpenCV Mat for display
+      cg_copy(&im_cv_out, *in_cg_out, 0);
+
+      namedWindow("Source window", WINDOW_AUTOSIZE);
+      namedWindow("Destination window", WINDOW_AUTOSIZE);
+
+      imshow("Source window", im_cv_src_planes[0]);
+      imshow("Destination window", im_cv_out);
+
+      waitKey(0);
+   }
+
+#endif
+
+   // Real-time from sequence algorithm TEST
+   // -----------------------------------------------------------------------------
+#if 0
 
    const int alpha_slider_max = 256;
    int       alpha_slider     = 6;
@@ -209,9 +280,6 @@ main(int argc, char *argv[])
       split(src, spl);
 
       // Attaching to the OpenCV buffers
-      //in_image_r->get_plane(0).attach(src.rows*src.cols, src.data);
-      //in_image_g->get_plane(0).attach(src.rows*src.cols, src.data);
-      //in_image_b->get_plane(0).attach(src.rows*src.cols, src.data);
       cg_attach(in_image_vec[0], &spl[0], 0);
       cg_attach(in_image_vec[1], &spl[1], 0);
       cg_attach(in_image_vec[2], &spl[2], 0);
